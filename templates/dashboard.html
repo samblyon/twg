@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Bored?</title>
+
+	<link rel="stylesheet" href="../static/css/waitapp_bs.css">
+ 
+    <link href="../static/css/waitapp_jumbotron.css" rel="stylesheet">
+
+ 	<script src="../static/js/jquery-2.2.0.min.js"></script>
+
+	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+
+    <script>
+    	$(function() {
+    		$.ajax({
+    			url: '/getAllWaits',
+    			type: 'GET',
+    			success: function(response) {
+    				console.log(response);
+    				var data = JSON.parse(response);
+
+    				var itemsPerRow = 0;
+    				var div = $('<div>').attr('class','row');
+    				
+    				for (var i = 0; i < data.length; i++) {
+    					
+    					if (itemsPerRow < 10) {
+    						var stuff = CreateThumb(data[i].Id, data[i].Title, data[i].Description, data[i].Like, data[i].HasLiked, data[i].Poster, data[i].TimeElapsed);
+    						if (i == data.length - 1) {
+    							div.append(stuff);
+    							$('.well').append(div);
+    						} else {
+    							div.append(stuff);
+    							itemsPerRow++;
+    						}
+    					} else {
+    						$('.well').append(div);
+    						div = $('<div>').attr('class','row');
+    						div.append(stuff);
+
+    						if (i == data.length - 1) {
+    							$('.well').append(div);
+    						}
+    						itemsPerRow = 1;
+    					}
+    				}
+    			},
+    			error: function(error) {
+    				console.log(error);
+    			}
+    		});
+    	})
+
+    	function CreateThumb(id,title,desc,like,hasLiked,poster,timeElapsed) {
+    		var mainDiv = $('<div>').attr('class', 'col-sm-4 col-md-4');
+    		var thumbNail = $('<div>').attr('class', 'thumbnail');
+    		var caption = $('<div>').attr('class','caption');
+    		var title = $('<h4>').text(poster + " is waiting " + title + " for " + desc);
+    		// var desc = $('<p>').text("for " + desc);
+    		var p = $('<p>');
+    		var btn = $('<button>').attr({
+    			'id': 'btn_' + id,
+    			'type': 'button',
+    			'class': 'btn btn-danger btn-sm'
+    		});
+
+    		var span = $('<span>').attr({
+    			'class':'glyphicon glyphicon-thumbs-up',
+    			'aria-hidden':'true'
+    		});
+
+    		var likeSpan = $('<span>').attr({'aria-hidden':'true','id':'span_'+id});
+
+    		var dateSpan = $('<span>').attr('class','datespan');
+
+    		if (timeElapsed < 60) {
+    			var timeText = timeElapsed + 'm ago';
+    		} else if (timeElapsed < 120) {
+    			var timeText = '1h ago';
+    		} else if (timeElapsed < 1440) {
+    			var timeText = String(Number(timeElapsed)/60) + 'h ago';
+    		} else if (timeElapsed < 2880) {
+    			var timeText = '1d ago';
+    		} else if (timeElapsed < 43200) {
+    			var timeText = String(Math.round(Number(timeElapsed)/1440)) + 'd ago';
+    		} else {
+    			var timeText = '> 1 month ago';
+    		}
+
+    		dateSpan.html(timeText);
+
+    		if ((hasLiked == "1") && (Number(like) == 2)) {
+    			likeSpan.html('&nbsp; You & ' + (Number(like) - 1) + ' Other');
+    		} else if (hasLiked > "1") {
+    			likeSpan.html('&nbsp; You & ' + (Number(like) - 1) + ' Others');
+    		} else {
+    			likeSpan.html('&nbsp;' + like + ' like(s)');
+    		}
+    		
+
+    		p.append(btn.append(span));
+    		p.append(likeSpan);
+
+    		caption.append(dateSpan);
+    		caption.append(title);
+    		// caption.append(desc);
+    		caption.append(p);
+
+    		thumbNail.append(caption);
+
+    		mainDiv.append(thumbNail);
+
+    		return mainDiv;
+    	}
+
+    	$(document).on('click','[id^="btn"]', function() {
+    		var spId = $(this).attr('id').split('_')[1];
+    		$.ajax({
+    			url: '/addUpdateLike',
+    			method: 'POST',
+    			data: {
+    				wait: $(this).attr('id').split('_')[1],
+    				like: 1
+    			},
+    			success: function(response) {
+    				var obj = JSON.parse(response);
+
+    				if (obj.likeStatus == "1" && obj.total > 2) {
+    					$('#span_'+spId).html('&nbsp;You & ' + (Number(obj.total) - 1) + ' Others');
+    				} else if (obj.likeStatus == "1" && obj.total == 1) {
+    					$('#span_'+spId).html('&nbsp; Liked');
+    				} else if (obj.likeStatus == "1" && obj.total == 2) {
+    					$('#span_'+spId).html('&nbsp; You & 1 Other');
+    				} else { 
+    					$('#span_'+spId).html('&nbsp;' + obj.total + ' likes(s)');
+    				}
+    			},
+    			error: function(error) {
+    				console.log(error);
+    			}
+    		});
+    	});
+
+    </script>
+
+</head>
+
+<body>
+	<div class="container">
+		<div class="header">
+			<nav>
+				<ul class="nav nav-pills pull-right">
+					<li role="presentation" class="active"><a href="/showAddWish">Add Wait</a></li>
+					<li role="presentation"><a href="/userHome">My Waits</a></li>
+					<li role="presentation"><a href="/logout">Logout</a></li>
+				</ul>
+			</nav>
+			<h3>Hey {{user}}!</h3>
+			<h4 class="text-muted">Waiting for something? You're not alone:</h4>
+		</div>
+
+		<div class="well">
+            
+        </div>
+
+		<footer class="footer">
+			<p>&copy; Samuel Lyon 2015</p>
+		</footer>
+
+	</div>
+
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>The Waiting Game</title>
+	<link href="../static/css/bootstrap.min.css" rel="stylesheet">
+
+	<link href="../static/css/jumbotron-narrow.css" rel="stylesheet">
+
+	<script src="../static/js/jquery-2.2.0.min.js"></script>
+
+</head>
+
+<body>
+	<div class="container">
+		<div class="header">
+			<nav>
+				<ul class="nav nav-pills pull-right">
+					<li role="presentation" class="active"><a href="/logout">Logout</a></li>
+				</ul>
+			</nav>
+			<h3 class="text-muted">The Waiting Game</h3>
+		</div>
+
+		<section>
+			<form class="form-horizontal" method="post" action="/addWish" accept-charset="utf-8mb4">
+				<fieldset>
+
+					<!-- Form Name -->
+					<legend>What are you waiting for?</legend>
+
+					<!-- Text input -->
+					<div class="form-group">
+						<label class="col-md-4 control-label" for="txtTitle">Wait time</label>
+						<div class="col-md-4">
+							<input id="txtTitle" name="inputTitle" type="text" placeholder="placeholder" class="form-control input-md"/>
+						</div>
+					</div>
+
+					<!-- Text Area -->
+					<div class="form-group">
+						<label class="col-md-4 control-label" for="txtPost">Waiting for...</label>
+						<div class="col-md-4">
+							<textarea class="form-control" id="txtPost" name="inputDescription"></textarea>
+						</div>
+					</div>
+
+					<!-- Button -->
+					<div class="form-group">
+						<label class="col-md-4 control-label" for="singlebutton"></label>
+						<div class="col-md-4">
+							<input id="singlebutton" name="singlebutton" class="btn btn-primary" type="submit" value="Publish" />
+						</div>
+					</div>
+
+
+				</fieldset>
+			</form>
+		</section>
+		<footer class="footer">
+			<p>&copy; Samuel Lyon 2016</p>
+		</footer>
+
+	</div>
+</body>
+
+</html>

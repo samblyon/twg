@@ -319,4 +319,10 @@ def addUpdateLike():
 		conn.close()
 
 if __name__ == "__main__":
-	app.run()
+	# Bind to PORT if defined, otherwise default to 5000.
+    if 'PORT' in globals():
+    	_port = PORT
+    else:
+    	_port = 5000
+
+    app.run(host='0.0.0.0', port=_port)

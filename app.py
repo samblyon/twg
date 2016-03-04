@@ -14,7 +14,7 @@ app.config['MYSQL_DATABASE_DB'] = 'BucketList'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 app.config['MYSQL_DATABASE_CHARSET'] = 'utf8mb4'
 app.config['MYSQL_USE_UNICODE'] = 'True'
-mysql.init_app(app)
+#mysql.init_app(app)
 
 @app.route("/")
 def main():

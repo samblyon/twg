@@ -133,7 +133,7 @@ def addWish():
 
 			if len(data) is 0:
 				conn.commit()
-				return redirect('/userHome')
+				return redirect('/showDashboard')
 			else:
 				return render_template('error.html',error = 'An error occurred!')
 				#return json.dumps({'error':str(data[0])})

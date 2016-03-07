@@ -111,7 +111,7 @@ def validateLogin():
 			else:
 				return render_template('error.html',error = 'Wrong Email address or Password!')
 		else:
-			return render_template('error.html',error = 'Len not 0 Wrong Email address or Password!')
+			return render_template('error.html',error = 'Wrong Email address or Password!')
 
 	except Exception as e:
 		return render_template('error.html',error = str(e))

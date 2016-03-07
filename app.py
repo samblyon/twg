@@ -87,8 +87,6 @@ def signUp():
 	finally:
 		cursor.close()
 		conn.close()
-		return redirect('/showSignin')
-
 
 @app.route('/validateLogin',methods=['POST'])
 def validateLogin():

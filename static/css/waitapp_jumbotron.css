@@ -16,7 +16,7 @@ body {
 .header {
   padding-bottom: 1px;
   /*border-bottom: 1px solid #e5e5e5;*/
-  background-color: #f5f5f5;
+  background-color: #fff;
 }
 /* Make the masthead heading the same height as the navigation */
 .header h3 {

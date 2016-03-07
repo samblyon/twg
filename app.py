@@ -315,6 +315,8 @@ def addUpdateLike():
 			cursor.callproc('sp_AddUpdateLikes',(_waitId,_user,_like))
 			result = cursor.fetchall()
 
+
+
 			if len(result) is 0:
 				conn.commit()
 				cursor.close()
@@ -322,11 +324,12 @@ def addUpdateLike():
 
 				conn = mysql.connect()
 				cursor = conn.cursor()
-				
 				#cursor.callproc('sp_getLikeStatus',(_waitId,_user,))
+				
 				sql = ("select CAST(sum(wait_like) as char), CAST(exists(select 1 from tbl_likes where wait_id = %s and user_id = %s and wait_like = 1) as char) as hasLiked from tbl_likes where wait_id = %s")
 				params = (_waitId, _user, _waitId)
 				
+				cursor.execute(sql,params)
 				result = cursor.fetchall()
 
 				return json.dumps({'status':'OK','total':result[0][0],'likeStatus':result[0][1]})

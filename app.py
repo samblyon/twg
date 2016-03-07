@@ -233,7 +233,7 @@ def getAllWaits():
 					'Title': row[1],
 					'Description': row[2],
 					'Like': str(row[3]),
-					'HasLiked': str(hasLikeds[_id]) if _id in hasLikeds.keys() else "0",
+					'HasLiked': str(hasLikeds[_id]) if _id in hasLikeds.keys() else 0,
 					'Poster': row[4],
 					'TimeElapsed': row[5]
 					}

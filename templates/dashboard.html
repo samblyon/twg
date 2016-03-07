@@ -129,7 +129,9 @@
     				like: 1
     			},
     			success: function(response) {
-    				var obj = JSON.parse(response);
+    				
+                    console.log(response);
+                    var obj = JSON.parse(response);
 
     				if (obj.likeStatus == "1" && obj.total > 2) {
     					$('#span_'+spId).html('&nbsp;You & ' + (Number(obj.total) - 1) + ' Others');

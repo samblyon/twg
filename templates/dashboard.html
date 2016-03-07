@@ -10,7 +10,7 @@
 
  	<script src="../static/js/jquery-2.2.0.min.js"></script>
 
-	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+	<script type="text/javascript" src="../static/js/jquery.tmpl.js"></script>
 
     <script>
     	$(function() {
@@ -93,11 +93,15 @@
 
     		if ((hasLiked == "1") && (Number(like) == 2)) {
     			likeSpan.html('&nbsp; You & ' + (Number(like) - 1) + ' Other');
-    		} else if (hasLiked > "1") {
+    		} else if (hasLiked == "1" && Number(like) > 2) {
     			likeSpan.html('&nbsp; You & ' + (Number(like) - 1) + ' Others');
+    		} else if (hasLiked == "1" && Number(like) == 1) {
+                likeSpan.html('&nbsp; You like this')
+            } else if (Number(like) != 1) {
+    			likeSpan.html('&nbsp;' + like + ' likes');
     		} else {
-    			likeSpan.html('&nbsp;' + like + ' like(s)');
-    		}
+                likeSpan.html('&nbsp; 1 like')
+            }
     		
 
     		p.append(btn.append(span));

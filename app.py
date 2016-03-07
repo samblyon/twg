@@ -87,7 +87,7 @@ def signUp():
 	finally:
 		cursor.close()
 		conn.close()
-		return render_template('signin.html')
+		return redirect('/showSignin')
 
 
 @app.route('/validateLogin',methods=['POST'])

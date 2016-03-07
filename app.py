@@ -315,8 +315,6 @@ def addUpdateLike():
 			cursor.callproc('sp_AddUpdateLikes',(_waitId,_user,_like))
 			result = cursor.fetchall()
 
-
-
 			if len(result) is 0:
 				conn.commit()
 				cursor.close()

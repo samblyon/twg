@@ -80,7 +80,7 @@
     		} else if (timeElapsed < 120) {
     			var timeText = '1h ago';
     		} else if (timeElapsed < 1440) {
-    			var timeText = String(Number(timeElapsed)/60) + 'h ago';
+    			var timeText = String(Math.round(Number(timeElapsed)/60)) + 'h ago';
     		} else if (timeElapsed < 2880) {
     			var timeText = '1d ago';
     		} else if (timeElapsed < 43200) {

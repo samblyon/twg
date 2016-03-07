@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, json, request, redirect, session
 from flask.ext.mysql import MySQL
 from werkzeug import generate_password_hash, check_password_hash
@@ -7,10 +8,10 @@ app = Flask(__name__)
 app.secret_key = 'nope'
 
 #MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'balloon'
-app.config['MYSQL_DATABASE_DB'] = 'BucketList'
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+app.config['MYSQL_DATABASE_USER'] = 'b98c05c583383d'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'ff82d00b'
+app.config['MYSQL_DATABASE_DB'] = 'heroku_815bb5657d40ca4'
+app.config['MYSQL_DATABASE_HOST'] = 'us-cdbr-iron-east-03.cleardb.net'
 app.config['MYSQL_DATABASE_CHARSET'] = 'utf8mb4'
 app.config['MYSQL_USE_UNICODE'] = 'True'
 mysql.init_app(app)
@@ -336,4 +337,6 @@ def addUpdateLike():
 		conn.close()
 
 if __name__ == "__main__":
-	app.run()
+	# Bind to PORT if defined, otherwise default to 5000.
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)

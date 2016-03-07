@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, json, request, redirect, session
 from flask.ext.mysql import MySQL
 from werkzeug import generate_password_hash, check_password_hash
@@ -205,36 +206,19 @@ def getAllWaits():
 			_user = session.get('user')
 			conn = mysql.connect()
 			cursor = conn.cursor()
-			
-			# get waits and ids
-			cursor.execute("select w.wait_id, w.wait_title, w.wait_description, sum(i.wait_like), u.user_name, (TIMESTAMPDIFF(MINUTE, NOW(), w.wait_date) * -1) AS timeElapsed FROM tbl_likes AS i INNER JOIN tbl_wait as w ON i.wait_id = w.wait_id INNER JOIN tbl_user AS u ON w.wait_user_id = u.user_id GROUP BY w.wait_id ORDER BY w.wait_date DESC")
-			wait_data = cursor.fetchall()
-
-			# get dict of haslikeds by wait id
-			cursor.execute("select tbl_wait.wait_id, tbl_likes.wait_like FROM tbl_wait JOIN tbl_likes ON tbl_wait.wait_id = tbl_likes.wait_id WHERE user_id = %s group by wait_id",(_user,))
-			has_liked_data = cursor.fetchall()
-			
-			# Convert nested lists to dictionary
-			hasLikeds = {}
-			for wait in has_liked_data:
-				hasLikeds[str(wait[0])] = wait[1]
-
-			# return json.dumps(hasLikeds)
-			
-			# Get hasliked by wait id
-			
+			cursor.execute("SELECT tbl_wait.wait_id,tbl_wait.wait_title,tbl_wait.wait_description,getSum(wait_id),hasLiked(wait_id, %s),tbl_user.user_name,(TIMESTAMPDIFF(MINUTE, NOW(), wait_date) * - 1) FROM tbl_wait, tbl_user WHERE tbl_wait.wait_user_id = tbl_user.user_id ORDER BY wait_date DESC",(_user,))
+			# cursor.callproc('sp_GetAllWaitsTwo',(_user,))
+			result = cursor.fetchall()
 			waits_dict = []
-			for row in wait_data:
-				_id = str(row[0])
-				
+			for wait in result:
 				wait_dict = {
-					'Id': row[0],
-					'Title': row[1],
-					'Description': row[2],
-					'Like': str(row[3]),
-					'HasLiked': str(hasLikeds[_id]) if _id in hasLikeds.keys() else "0",
-					'Poster': row[4],
-					'TimeElapsed': row[5]
+					'Id': wait[0],
+					'Title': wait[1],
+					'Description': wait[2],
+					'Like': wait[3],
+					'HasLiked': wait[4],
+					'Poster': wait[5],
+					'TimeElapsed': wait[6]
 					}
 				waits_dict.append(wait_dict)
 
@@ -336,4 +320,6 @@ def addUpdateLike():
 		conn.close()
 
 if __name__ == "__main__":
-	app.run()
+	# Bind to PORT if defined, otherwise default to 5000.
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)

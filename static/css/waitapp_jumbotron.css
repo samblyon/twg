@@ -12,6 +12,18 @@ body {
   padding-left: 2px;
 }
 
+.header-waitapp {
+  float: left;
+  margin-bottom: 10px;
+
+
+}
+
+.title-text-waitapp {
+  margin-top: 10px;
+
+}
+
 /* Custom page header */
 .header {
   padding-bottom: 1px;

@@ -8,10 +8,10 @@ app = Flask(__name__)
 app.secret_key = 'nope'
 
 #MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = 'b98c05c583383d'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'ff82d00b'
-app.config['MYSQL_DATABASE_DB'] = 'heroku_815bb5657d40ca4'
-app.config['MYSQL_DATABASE_HOST'] = 'us-cdbr-iron-east-03.cleardb.net'
+app.config['MYSQL_DATABASE_USER'] = os.environ['DATABASE_USER']
+app.config['MYSQL_DATABASE_PASSWORD'] = os.environ['DATABASE_PASSWORD']
+app.config['MYSQL_DATABASE_DB'] = os.environ['DATABASE_NAME']
+app.config['MYSQL_DATABASE_HOST'] = os.environ['DATABASE_HOST']
 app.config['MYSQL_DATABASE_CHARSET'] = 'utf8mb4'
 app.config['MYSQL_USE_UNICODE'] = 'True'
 mysql.init_app(app)

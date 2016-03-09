@@ -25,7 +25,10 @@ def main():
 
 @app.route("/showSignin")
 def showSignin():
-	return render_template('signin.html')
+	if session.get('user'):
+		return redirect('/showDashboard')
+	else:
+		return render_template('signin.html')
 
 @app.route('/userHome')
 def userHome():

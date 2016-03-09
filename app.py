@@ -1,4 +1,5 @@
 import os
+import sendgrid
 from flask import Flask, render_template, json, request, redirect, session
 from flask.ext.mysql import MySQL
 from werkzeug import generate_password_hash, check_password_hash
@@ -6,6 +7,9 @@ from werkzeug import generate_password_hash, check_password_hash
 mysql = MySQL()
 app = Flask(__name__)
 app.secret_key = 'nope'
+
+#sendgrid configuration
+sendgrid = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'],os.environ['SENDGRID_PASSWORD'])
 
 #MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = os.environ['DATABASE_USER']

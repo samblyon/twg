@@ -13,36 +13,43 @@
 
 <body>
 	<div class="container">
-		<div class="header">
+		<div class="header-waitapp">
 			<nav>
 				<ul class="nav nav-pills pull-right">
-					<li role="presentation"><a href="/logout">logout</a></li>
-					<li role="presentation"><a href="/showDashboard">home</a></li>
+				<!-- 	<li role="presentation" class="active">
+						<a href="/showDashboard">back</a>
+					</li> -->
+					<!-- <li role="presentation"><a href="/logout">logout</a></li> -->
+					
 				</ul>
 			</nav>
-			<h3 class="text-muted">The Waiting Game</h3>
 		</div>
 
-		<section>
+		<!-- <div class="text-title-waitapp">
+			<h4 class="text-muted"><br><br></h4>
+		</div> -->
+
+
+		<div>
 			<form class="form-horizontal" method="post" action="/addWish" accept-charset="utf-8mb4">
 				<fieldset>
 
 					<!-- Form Name -->
-					<legend>What are you waiting for?</legend>
+					<h3>What are you waiting for?</h3>
 
 					<!-- Text input -->
 					<div class="form-group">
-						<label class="col-md-4 control-label" for="txtTitle">Wait duration</label>
+						<label class="col-md-4 control-label" for="txtTitle">Waiting...</label>
 						<div class="col-md-4">
-							<input id="txtTitle" name="inputTitle" type="text" placeholder="placeholder" class="form-control input-md"/>
+							<input id="txtTitle" name="inputTitle" type="text" placeholder="35 mins" class="form-control input-md"/>
 						</div>
 					</div>
 
 					<!-- Text Area -->
 					<div class="form-group">
-						<label class="col-md-4 control-label" for="txtPost">Waiting for...</label>
+						<label class="col-md-4 control-label" for="txtPost">for...</label>
 						<div class="col-md-4">
-							<textarea class="form-control" id="txtPost" name="inputDescription"></textarea>
+							<textarea class="form-control" id="txtPost" name="inputDescription" placeholder="&#x1F36A; to be done!"></textarea>
 						</div>
 					</div>
 
@@ -50,15 +57,21 @@
 					<div class="form-group">
 						<label class="col-md-4 control-label" for="singlebutton"></label>
 						<div class="col-md-4">
-							<input id="singlebutton" name="singlebutton" class="btn btn-primary" type="submit" value="Publish" />
+							<input id="singlebutton" name="singlebutton" class="btn btn-primary btn-lg btn-block" type="submit" value="Post!" />
 						</div>
 					</div>
 
 
 				</fieldset>
 			</form>
-		</section>
+
+			<div class="jumbotron-white">
+				<a href="showDashboard">jk, go back</a>
+			</div>
+		</div>
 		<footer class="footer">
+			<br><br><br>
+			<p>The Waiting Game</p>
 			<p>&copy; SBL 2015</p>
             <p><a href="mailto:sblyon@me.com?Subject=The%20Waiting%20Game" target="_top">contact</a></p>
 		</footer>

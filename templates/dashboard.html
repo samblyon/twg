@@ -81,7 +81,7 @@
     		} else if (timeElapsed < 120) {
     			var timeText = '1h ago';
     		} else if (timeElapsed < 1440) {
-    			var timeText = String(Number(timeElapsed)/60) + 'h ago';
+    			var timeText = String(Math.round(Number(timeElapsed)/60)) + 'h ago';
     		} else if (timeElapsed < 2880) {
     			var timeText = '1d ago';
     		} else if (timeElapsed < 43200) {
@@ -158,8 +158,8 @@
 		<div class="header-waitapp">
 			<nav>
 				<ul class="nav nav-pills pull-right">
-					<li role="presentation" class="active"><a href="/showAddWish">Add Wait</a></li>
-					<li role="presentation"><a href="/userHome">My Waits</a></li>
+					<li role="presentation" class="active"><a href="/showAddWish">add wait<span class="glyphicon glyphicon-pencil"></a></li>
+					<li role="presentation"><a href="/userHome">edit</a></li>
 					<li role="presentation"><a href="/logout">Logout</a></li>
 				</ul>
 			</nav>

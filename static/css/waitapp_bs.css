@@ -26,6 +26,7 @@ menu,
 nav,
 section,
 summary {
+  float: left;
   display: block;
 }
 audio,

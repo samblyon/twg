@@ -149,22 +149,65 @@
     		});
     	});
 
+        $(document).scroll(function() {
+            if ($(this).scrollTop()) {
+                $("#floating-nav-content").slideDown(100);
+            }
+        });
+
     </script>
+
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #floating-nav-content {
+            top: 0;
+            /*width: 100%;*/
+            height: 60px;
+            background-color: #fff;
+            position: fixed;
+            display: none;
+            color: #FFF;
+            padding: 0px;
+            margin-top: 10px;
+        }
+    </style>
 
 </head>
 
 <body>
 	<div class="container">
-		<div class="header-waitapp">
-			<nav>
-				<ul class="nav nav-pills pull-right">
-					<li role="presentation" class="active"><a href="/showAddWish">add wait  <span class="glyphicon glyphicon-pencil"></a></li>
-					<li role="presentation"><a href="/userHome">edit</a></li>
-					<li role="presentation"><a href="/logout">Logout</a></li>
-				</ul>
-			</nav>
-			
-		</div>
+    	<div>
+            <div class="header-waitapp">
+                <nav>
+                    <ul class="nav nav-pills pull-right">
+                        <li role="presentation" class="active"><a href="/showAddWish">add wait &nbsp; <span class="glyphicon glyphicon-pencil"></a></li>
+                        <li role="presentation"><a href="/userHome">edit</a></li>
+                        <li role="presentation"><a href="/logout">logout</a></li>
+                    </ul>
+                </nav>
+                
+            </div>
+        </div>
+
+        <div id="floating-nav-content">
+            <div class="header-waitapp">
+    			<nav>
+    				<ul class="nav nav-pills pull-right">
+    					<li role="presentation" class="active"><a href="/showAddWish">add wait &nbsp; <span class="glyphicon glyphicon-pencil"></a></li>
+    					<li role="presentation"><a href="/userHome">edit</a></li>
+    					<li role="presentation"><a href="/logout">logout</a></li>
+    				</ul>
+    			</nav>
+    			
+    		</div>
+        </div>
+
+
+
         <div class="title-text-waitapp">
             <h3>Hey {{user}}!</h3>
             <h4 class="text-muted">Waiting for something? You're not alone:</h4>

@@ -17,7 +17,8 @@ body {
 }
 
 .title-text-waitapp {
-  float: left;
+  /*float: left;*/
+  margin-top: 50px;
 }
 
 /* Custom page header */
@@ -38,7 +39,7 @@ body {
   float: left;
   padding-top: 19px;
   color: #777;
-  border-top: 1px solid #e5e5e5;
+  /*border-top: 1px solid #e5e5e5;*/
 }
 
 /* Customize container */
@@ -53,6 +54,8 @@ body {
 
 /* Main marketing message and sign up button */
 .jumbotron {
+  /*float: left;*/
+  margin-top: 25px;
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
 }

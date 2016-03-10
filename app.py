@@ -386,7 +386,8 @@ def addUpdateLike():
 				message.add_to(poster_email)
 				message.set_from('twg! <hi.from.twg@gmail.com>')
 				message.set_subject('%s liked your post!' % liker_username)
-				message.set_text('%s liked your post! \n %s is waiting %s for %s' % params)
+				message.set_text('%s liked your post! \n %s is waiting %s for %s \n' % params)
+				message.set_html('<a href="twg-twg.herokuapp.com">Click here to see your post</a>')
 
 				msg = sg.send(message)				
 				

@@ -140,16 +140,17 @@ def addWish():
 			data = cursor.fetchall()
 
 			cursor.execute('SELECT user_name FROM tbl_user WHERE user_id = %s',(_user,))
-			_username = cursor.fetchall()
-			return json.dumps(_username)
+			result = cursor.fetchall()
+			_username = result[0][0]
+			
 
 			if len(data) is 0:
 				conn.commit()
 
-				params = (_user,_title,_description)
+				params = (_username,_title,_description)
 				message = sendgrid.Mail()
-				message.add_to('Sam <sblyon@me.com>')
-				message.set_from('Mister Mail <sblyon@me.com>')
+				message.add_to('Admin <sblyon@me.com')
+				message.set_from('twg! <hi.from.twg@gmail.com>')
 				message.set_subject('New Post by %s' % _username)
 				message.set_text('%s is waiting %s for %s' % params)
 

@@ -389,8 +389,8 @@ def addUpdateLike():
 				message.set_text('%s liked your post! \n %s is waiting %s for %s' % params)
 
 				msg = sg.send(message)				
-
-				return json.dumps({'status':'OK','total':result[0][0],'likeStatus':result[0][1]})
+				return json.dumps({'status':msg})
+				# return json.dumps({'status':'OK','total':result[0][0],'likeStatus':result[0][1]})
 			else:
 				return render_template('error.html',error = 'An error occurred!')
 		else:

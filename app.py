@@ -368,7 +368,6 @@ def addUpdateLike():
 				cursor.execute(sql,param)
 				poster_data = cursor.fetchall()
 				
-				return json.dumps({poster_data})
 				_title = poster_data[0][0]
 				_description = poster_data[0][1]
 				poster_username = poster_data[0][2]
@@ -376,11 +375,13 @@ def addUpdateLike():
 
 				# Get liker username
 				sql = ('select u.user_name from tbl_user as u where u.user_id = %s')
-				param = (_user)
+				param = (_user,)
 				cursor.execute(sql,param)
 				liker_data = cursor.fetchall()
+				return json.dumps(liker_data)
 				liker_username = liker_data[0][0]
 
+				
 
 				#send like email
 				# params = (liker_username,poster_username,_title,_description)

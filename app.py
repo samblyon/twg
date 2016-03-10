@@ -377,12 +377,12 @@ def addUpdateLike():
 					liker_username = liker_data[0][0]
 
 					# send like email
-					params = (liker_username,poster_username,_title,_description)
+					params = (poster_username,liker_username,poster_username,_title,_description)
 					message = sendgrid.Mail()
 					message.add_to(poster_email)
 					message.set_from('twg! <hi.from.twg@gmail.com>')
 					message.set_subject('%s liked your post!' % liker_username)
-					message.set_html('<p>Whoa, %s liked your post! <br><br>You said: %s is waiting %s for %s.<br><br>If you want to see your post, head to twg-twg.herokuapp.com &#x1F604; <br><br> Cheers!<br>&nbsp;&nbsp;The Waiting Game - <i>Patience is a virtue, and virtue should be rewarded.</i></p>' % params)
+					message.set_html('<p>Yo %s! Looks like %s liked your waitpost!<br> I mean, who wouldn\'t. You were all like, %s is waiting %s for %s<br><br>Go take a look! twg-twg.herokuapp.com &#x1F604; <br><br>The Waiting Game<br>Patience is a virtue, and virtue should be rewarded.</p>' % params)
 
 					msg = sg.send(message)				
 					

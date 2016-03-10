@@ -377,7 +377,7 @@ def addUpdateLike():
 					liker_username = liker_data[0][0]
 
 					# send like email
-					params = (poster_username,liker_username,poster_username,_title,_description)
+					params = (liker_username,poster_username,_title,_description)
 					message = sendgrid.Mail()
 					message.add_to(poster_email)
 					message.set_from('twg! <hi.from.twg@gmail.com>')

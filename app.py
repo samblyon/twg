@@ -398,7 +398,7 @@ def addUpdateLike():
 		else:
 			return render_template('error.html',error = 'Unauthorized Access')
 	except Exception, e:
-		return json.dumps({'status':'i am an error' str(e)})
+		return json.dumps({'status':'i am an error' + str(e)})
 	finally:
 		cursor.close()
 		conn.close()

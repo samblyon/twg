@@ -1,5 +1,6 @@
 import os
 import sendgrid
+from sendgrid import SendGridError, SendGridClientError, SendGridServerError
 from flask import Flask, render_template, json, request, redirect, session
 from flask.ext.mysql import MySQL
 from werkzeug import generate_password_hash, check_password_hash
@@ -9,7 +10,7 @@ app = Flask(__name__)
 app.secret_key = 'nope'
 
 #sendgrid configuration
-sendgrid = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'],os.environ['SENDGRID_PASSWORD'])
+sg = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'],os.environ['SENDGRID_PASSWORD'])
 
 #MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = os.environ['DATABASE_USER']
@@ -138,9 +139,24 @@ def addWish():
 			cursor.callproc('sp_addWait',(_title,_description,_user))
 			data = cursor.fetchall()
 
+			cursor.execute('SELECT user_name FROM tbl_user WHERE user_id = %s',(_user,))
+			_username = cursor.fetchall()
+			return json.dumps(_username)
+
 			if len(data) is 0:
 				conn.commit()
-				return redirect('/showDashboard')
+
+				params = (_user,_title,_description)
+				message = sendgrid.Mail()
+				message.add_to('Sam <sblyon@me.com>')
+				message.set_from('Mister Mail <sblyon@me.com>')
+				message.set_subject('New Post by %s' % _username)
+				message.set_text('%s is waiting %s for %s' % params)
+
+				msg = sg.send(message)
+
+				return json.dumps({'status':msg})
+				# return redirect('/showDashboard')
 			else:
 				return render_template('error.html',error = 'An error occurred!')
 				#return json.dumps({'error':str(data[0])})

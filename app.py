@@ -355,42 +355,37 @@ def addUpdateLike():
 				cursor.execute(sql,params)
 				result = cursor.fetchall()
 
-				# Get some params to send a like email:
-				# have: wait_id, liker_id
-				# need:
-					# poster email, poster username
-					# wait title, wait description
-					# liker username 
+				# Send Like Email if Liked
+				if result[0][1] == "1":
+					# Get some params to send a like email.
+					# Get post title, desc, poster email, username
+					sql = ('select w.wait_title, w.wait_description, u.user_name, u.user_username as poster_email from tbl_user as u JOIN tbl_wait as w ON w.wait_user_id = u.user_id WHERE w.wait_id = %s')
+					param = (_waitId,)
+					cursor.execute(sql,param)
+					poster_data = cursor.fetchall()
+					
+					_title = poster_data[0][0]
+					_description = poster_data[0][1]
+					poster_username = poster_data[0][2]
+					poster_email = poster_data[0][3]
 
-				# Get post title, desc, poster email, username
-				sql = ('select w.wait_title, w.wait_description, u.user_name, u.user_username as poster_email from tbl_user as u JOIN tbl_wait as w ON w.wait_user_id = u.user_id WHERE w.wait_id = %s')
-				param = (_waitId,)
-				cursor.execute(sql,param)
-				poster_data = cursor.fetchall()
-				
-				_title = poster_data[0][0]
-				_description = poster_data[0][1]
-				poster_username = poster_data[0][2]
-				poster_email = poster_data[0][3]
+					# Get liker username
+					sql = ('select u.user_name from tbl_user as u where u.user_id = %s')
+					param = (_user,)
+					cursor.execute(sql,param)
+					liker_data = cursor.fetchall()
+					liker_username = liker_data[0][0]
 
-				# Get liker username
-				sql = ('select u.user_name from tbl_user as u where u.user_id = %s')
-				param = (_user,)
-				cursor.execute(sql,param)
-				liker_data = cursor.fetchall()
-				liker_username = liker_data[0][0]
+					# send like email
+					params = (liker_username,poster_username,_title,_description)
+					message = sendgrid.Mail()
+					message.add_to(poster_email)
+					message.set_from('twg! <hi.from.twg@gmail.com>')
+					message.set_subject('%s liked your post!' % liker_username)
+					message.set_html('<p> %s liked your post! <br> %s is waiting %s for %s <br> Want to see your post? Head to twg-twg.herokuapp.com &#x1F604; </p>' % params)
 
-				# send like email
-				params = (liker_username,poster_username,_title,_description)
-				message = sendgrid.Mail()
-				message.add_to(poster_email)
-				message.set_from('twg! <hi.from.twg@gmail.com>')
-				message.set_subject('%s liked your post!' % liker_username)
-				message.set_text('%s liked your post! \n %s is waiting %s for %s \n' % params)
-				message.set_html('<a href="twg-twg.herokuapp.com">Click here to see your post</a>')
-
-				msg = sg.send(message)				
-				
+					msg = sg.send(message)				
+					
 				return json.dumps({'status':'OK','total':result[0][0],'likeStatus':result[0][1]})
 			else:
 				return render_template('error.html',error = 'An error occurred!')

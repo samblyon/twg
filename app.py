@@ -378,22 +378,19 @@ def addUpdateLike():
 				param = (_user,)
 				cursor.execute(sql,param)
 				liker_data = cursor.fetchall()
-				return json.dumps(liker_data)
 				liker_username = liker_data[0][0]
 
-				
+				send like email
+				params = (liker_username,poster_username,_title,_description)
+				message = sendgrid.Mail()
+				message.add_to(poster_email)
+				message.set_from('twg! <hi.from.twg@gmail.com>')
+				message.set_subject('%s liked your post!' % liker_username)
+				message.set_text('%s liked your post! \n %s is waiting %s for %s' % params)
 
-				#send like email
-				# params = (liker_username,poster_username,_title,_description)
-				# message = sendgrid.Mail()
-				# message.add_to(poster_email)
-				# message.set_from('twg! <hi.from.twg@gmail.com>')
-				# message.set_subject('%s liked your post!' % liker_username)
-				# message.set_text('%s liked your post! \n %s is waiting %s for %s' % params)
-
-				# msg = sg.send(message)				
+				msg = sg.send(message)				
 				
-				# return json.dumps({'status':'OK','total':result[0][0],'likeStatus':result[0][1]})
+				return json.dumps({'status':'OK','total':result[0][0],'likeStatus':result[0][1]})
 			else:
 				return render_template('error.html',error = 'An error occurred!')
 		else:

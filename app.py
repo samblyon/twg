@@ -382,7 +382,7 @@ def addUpdateLike():
 					message.add_to(poster_email)
 					message.set_from('twg! <hi.from.twg@gmail.com>')
 					message.set_subject('%s liked your post!' % liker_username)
-					message.set_html('<p>Hey, %s liked your post!<br>%s is waiting %s for %s<br>Want to see your post? Head to twg-twg.herokuapp.com &#x1F604; <br><br><i>(Reply "Fuck Off!" to stop being told when people like your posts, or just if you feel like it.</i></p>' % params)
+					message.set_html('<p>Hey, %s liked your post!<br>%s is waiting %s for %s<br>Want to see your post? Head to twg-twg.herokuapp.com &#x1F604; <br><br><i>(Reply "Fuck Off!" to stop being told when people like your posts, or just if you feel like it.)</i></p>' % params)
 
 					msg = sg.send(message)				
 					

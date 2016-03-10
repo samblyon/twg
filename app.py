@@ -367,6 +367,8 @@ def addUpdateLike():
 				param = (_waitId,)
 				cursor.execute(sql,param)
 				poster_data = cursor.fetchall()
+				
+				return json.dumps({poster_data})
 				_title = poster_data[0][0]
 				_description = poster_data[0][1]
 				poster_username = poster_data[0][2]
@@ -381,22 +383,22 @@ def addUpdateLike():
 
 
 				#send like email
-				params = (liker_username,poster_username,_title,_description)
-				message = sendgrid.Mail()
-				message.add_to(poster_email)
-				message.set_from('twg! <hi.from.twg@gmail.com>')
-				message.set_subject('%s liked your post!' % liker_username)
-				message.set_text('%s liked your post! \n %s is waiting %s for %s' % params)
+				# params = (liker_username,poster_username,_title,_description)
+				# message = sendgrid.Mail()
+				# message.add_to(poster_email)
+				# message.set_from('twg! <hi.from.twg@gmail.com>')
+				# message.set_subject('%s liked your post!' % liker_username)
+				# message.set_text('%s liked your post! \n %s is waiting %s for %s' % params)
 
-				msg = sg.send(message)				
-				return json.dumps({'status':msg})
+				# msg = sg.send(message)				
+				
 				# return json.dumps({'status':'OK','total':result[0][0],'likeStatus':result[0][1]})
 			else:
 				return render_template('error.html',error = 'An error occurred!')
 		else:
 			return render_template('error.html',error = 'Unauthorized Access')
 	except Exception, e:
-		return json.dumps({'status':str(e)})
+		return json.dumps({'status':'i am an error' str(e)})
 	finally:
 		cursor.close()
 		conn.close()

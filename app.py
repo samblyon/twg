@@ -134,11 +134,13 @@ def addWish():
 			_description = request.form['inputDescription']
 			_user = session.get('user')
 
+			# Add the new wait to the database
 			conn = mysql.connect()
 			cursor = conn.cursor()
 			cursor.callproc('sp_addWait',(_title,_description,_user))
 			data = cursor.fetchall()
 
+			# Get the username of the poster
 			cursor.execute('SELECT user_name FROM tbl_user WHERE user_id = %s',(_user,))
 			result = cursor.fetchall()
 			_username = result[0][0]
@@ -147,6 +149,7 @@ def addWish():
 			if len(data) is 0:
 				conn.commit()
 
+				# Notify admin of new post
 				params = (_username,_title,_description)
 				message = sendgrid.Mail()
 				message.add_to('Admin <sblyon@me.com')
@@ -156,7 +159,7 @@ def addWish():
 
 				msg = sg.send(message)
 
-				# return json.dumps({'status':msg})
+				# Redirect to home
 				return redirect('/showDashboard')
 			else:
 				return render_template('error.html',error = 'An error occurred!')
@@ -351,6 +354,41 @@ def addUpdateLike():
 				
 				cursor.execute(sql,params)
 				result = cursor.fetchall()
+
+				# Get some params to send a like email:
+				# have: wait_id, liker_id
+				# need:
+					# poster email, poster username
+					# wait title, wait description
+					# liker username 
+
+				# Get post title, desc, poster email, username
+				sql = ('select w.wait_title, w.wait_description, u.user_name, u.user_username as poster_email from tbl_user as u JOIN tbl_wait as w ON w.wait_user_id = u.user_id WHERE w.wait_id = %s')
+				param = (_waitId,)
+				cursor.execute(sql,param)
+				poster_data = cursor.fetchall()
+				_title = poster_data[0][0]
+				_description = poster_data[0][1]
+				poster_username = poster_data[0][2]
+				poster_email = poster_data[0][3]
+
+				# Get liker username
+				sql = ('select u.user_name from tbl_user as u where u.user_id = %s')
+				param = (_user)
+				cursor.execute(sql,param)
+				liker_data = cursor.fetchall()
+				liker_username = liker_data[0][0]
+
+
+				#send like email
+				params = (liker_username,poster_username,_title,_description)
+				message = sendgrid.Mail()
+				message.add_to(poster_email)
+				message.set_from('twg! <hi.from.twg@gmail.com>')
+				message.set_subject('%s liked your post!' % liker_username)
+				message.set_text('%s liked your post! \n %s is waiting %s for %s' % params)
+
+				msg = sg.send(message)				
 
 				return json.dumps({'status':'OK','total':result[0][0],'likeStatus':result[0][1]})
 			else:

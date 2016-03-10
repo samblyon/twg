@@ -156,8 +156,8 @@ def addWish():
 
 				msg = sg.send(message)
 
-				return json.dumps({'status':msg})
-				# return redirect('/showDashboard')
+				# return json.dumps({'status':msg})
+				return redirect('/showDashboard')
 			else:
 				return render_template('error.html',error = 'An error occurred!')
 				#return json.dumps({'error':str(data[0])})

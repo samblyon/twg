@@ -152,7 +152,7 @@ def addWish():
 				# Notify admin of new post
 				params = (_username,_title,_description)
 				message = sendgrid.Mail()
-				message.add_to('Admin <sblyon@me.com')
+				message.add_to('sblyon@me.com')
 				message.set_from('twg! <hi.from.twg@gmail.com>')
 				message.set_subject('New Post by %s' % _username)
 				message.set_text('%s is waiting %s for %s' % params)
@@ -382,7 +382,7 @@ def addUpdateLike():
 					message.add_to(poster_email)
 					message.set_from('twg! <hi.from.twg@gmail.com>')
 					message.set_subject('%s liked your post!' % liker_username)
-					message.set_html('<p> %s liked your post! <br> %s is waiting %s for %s <br> Want to see your post? Head to twg-twg.herokuapp.com &#x1F604; </p>' % params)
+					message.set_html('<p>Whoa, %s liked your post! <br><br>You said: %s is waiting %s for %s.<br><br>If you want to see your post, head to twg-twg.herokuapp.com &#x1F604; <br><br> Cheers!<br>&nbsp;&nbsp;The Waiting Game - <i>Patience is a virtue, and virtue should be rewarded.</i></p>' % params)
 
 					msg = sg.send(message)				
 					

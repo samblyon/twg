@@ -375,7 +375,6 @@ def addUpdateLike():
 				# 	cursor.execute(sql,param)
 				# 	liker_data = cursor.fetchall()
 				# 	liker_username = liker_data[0][0]
-
 				# 	# send like email
 				# 	params = (liker_username,poster_username,_title,_description)
 				# 	message = sendgrid.Mail()

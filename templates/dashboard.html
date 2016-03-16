@@ -13,6 +13,12 @@
 
 	<script type="text/javascript" src="../static/js/jquery.tmpl.js"></script>
 
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"></script> -->
+
     <script>
     	$(function() {
     		$.ajax({
@@ -62,7 +68,7 @@
     		// var desc = $('<p>').text("for " + desc);
     		var p = $('<p>');
     		var btn = $('<button>').attr({
-    			'id': 'btn_' + id,
+    			'id': 'likebtn_' + id,
     			'type': 'button',
     			'class': 'btn btn-danger btn-sm'
     		});
@@ -103,14 +109,20 @@
     		} else {
                 likeSpan.html('&nbsp; 1 like')
             }
-    		
 
-    		p.append(btn.append(span));
-    		p.append(likeSpan);
+            var commentBtn = $('<button>').attr({
+                'id': 'commentbtn_' + id,
+                'type': 'button',
+                'class': 'btn btn-sm'
+            });
+
+            var commentSpan = $('<span>').text("Comment");
+
+    		p.append(btn.append(span).append(likeSpan));
+            p.append(commentBtn.append(commentSpan));
 
     		caption.append(dateSpan);
     		caption.append(title);
-    		// caption.append(desc);
     		caption.append(p);
 
     		thumbNail.append(caption);
@@ -120,7 +132,7 @@
     		return mainDiv;
     	}
 
-    	$(document).on('click','[id^="btn"]', function() {
+    	$(document).on('click','[id^="likebtn"]', function() {
     		var spId = $(this).attr('id').split('_')[1];
     		$.ajax({
     			url: '/addUpdateLike',
@@ -148,6 +160,38 @@
     			}
     		});
     	});
+
+        $(document).on('click','[id^="commentbtn"]',
+            function() {
+                myId = $(this).attr('id').split('_')[1];
+                //Trigger the popup
+                console.log(myId)
+                $('#commentModal').modal();
+        });
+
+        $(function(){
+            // GetWaits();
+            $('#btnAddComment').click(function() {
+                $.ajax({
+                    url: '/addComment',
+                    data: {
+                        comment: $('#addComment').val(),
+                        id: myId
+                    },
+                    type: 'POST',
+                    success: function(res) {
+                        console.log(res);
+                        $('#editModal').modal('hide');
+                        // Repopulate the grid
+                        // GetWaits();
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                })
+            });
+        });
+
 
     </script>
 
@@ -181,6 +225,31 @@
 		</footer>
 
 	</div>
+
+    <!--Edit Popup-->
+    <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel">
+        <div class="modal-dialog" id="commentModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="commentModalLabel">Add Comment</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="addComment" class="control-label">Comment:</label>
+                            <textarea class="form-control" id="addComment"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="btnAddComment" class="btn btn-primary">Add!</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 

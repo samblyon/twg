@@ -173,6 +173,74 @@ def addWish():
 		cursor.close()
 		conn.close()
 
+@app.route('/addComment',methods=['POST'])
+def addComment():
+	# return str(session.get('user'))
+	try:
+		if session.get('user'):
+			_user = session.get('user')
+			_comment = request.form['comment']
+			_wait_id = request.form['id']
+
+			conn = mysql.connect()
+			cursor = conn.cursor()
+			sql = ("insert into tbl_comment (wait_id, comment_text, poster_id, comment_date) values (%s,%s,%s, NOW())")
+			params = (_wait_id,_comment,_user)
+			cursor.execute(sql,params)
+			data = cursor.fetchall()
+
+            # cursor.callproc('sp_updateWait',(_title,_description,_wait_id,_user))
+            # data = cursor.fetchall()
+			# data = []
+
+			if len(data) is 0:
+				conn.commit()
+				return json.dumps({'status':'OK'})
+			else:
+				return json.dumps({'status':'ERROR'})
+	except Exception as e:
+		return str(e)
+		# return json.dumps({'status':'Unauthorized access'})
+	# finally:
+	# 	if session.get('user'):
+	# 		return "hi"
+		# cursor.close()
+		# conn.close()
+
+
+			# Get the username of the poster
+			# cursor.execute('SELECT user_name FROM tbl_user WHERE user_id = %s',(_user,))
+			# result = cursor.fetchall()
+			# _username = result[0][0]
+			
+
+	# 		if len(data) is 0:
+	# 			conn.commit()
+
+	# 			# Notify admin of new post
+	# 			# params = (_username,_title,_description)
+	# 			# message = sendgrid.Mail()
+	# 			# message.add_to('sblyon@me.com')
+	# 			# message.set_from('twg! <hi.from.twg@gmail.com>')
+	# 			# message.set_subject('New Post by %s' % _username)
+	# 			# message.set_text('%s is waiting %s for %s' % params)
+
+	# 			# msg = sg.send(message)
+
+	# 			# Redirect to home
+	# 			return redirect('/showDashboard')
+	# 		else:
+	# 			return render_template('error.html',error = 'An error occurred!')
+	# 			#return json.dumps({'error':str(data[0])})
+	# 	else:
+	# 		return render_template('error.html',error = 'Unauthorized Access')
+	# except Exception as e:
+	# 	return render_template('error.html',error = str(e))
+
+	# finally:
+	# 	cursor.close()
+	# 	conn.close()
+
 @app.route('/getWait',methods=['GET'])
 def getWait():
 	try:
@@ -399,4 +467,5 @@ def addUpdateLike():
 if __name__ == "__main__":
 	# Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get("PORT", 5000))
+    app.debug = True
     app.run(host='0.0.0.0', port=port)

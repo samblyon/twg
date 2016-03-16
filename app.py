@@ -10,13 +10,13 @@ app = Flask(__name__)
 app.secret_key = 'nope'
 
 #sendgrid configuration
-sg = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'],os.environ['SENDGRID_PASSWORD'])
+# sg = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'],os.environ['SENDGRID_PASSWORD'])
 
 #MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = os.environ['DATABASE_USER']
-app.config['MYSQL_DATABASE_PASSWORD'] = os.environ['DATABASE_PASSWORD']
-app.config['MYSQL_DATABASE_DB'] = os.environ['DATABASE_NAME']
-app.config['MYSQL_DATABASE_HOST'] = os.environ['DATABASE_HOST']
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'balloon'
+app.config['MYSQL_DATABASE_DB'] = 'BucketList'
+app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 app.config['MYSQL_DATABASE_CHARSET'] = 'utf8mb4'
 app.config['MYSQL_USE_UNICODE'] = 'True'
 mysql.init_app(app)
@@ -150,14 +150,14 @@ def addWish():
 				conn.commit()
 
 				# Notify admin of new post
-				params = (_username,_title,_description)
-				message = sendgrid.Mail()
-				message.add_to('sblyon@me.com')
-				message.set_from('twg! <hi.from.twg@gmail.com>')
-				message.set_subject('New Post by %s' % _username)
-				message.set_text('%s is waiting %s for %s' % params)
+				# params = (_username,_title,_description)
+				# message = sendgrid.Mail()
+				# message.add_to('sblyon@me.com')
+				# message.set_from('twg! <hi.from.twg@gmail.com>')
+				# message.set_subject('New Post by %s' % _username)
+				# message.set_text('%s is waiting %s for %s' % params)
 
-				msg = sg.send(message)
+				# msg = sg.send(message)
 
 				# Redirect to home
 				return redirect('/showDashboard')
@@ -356,35 +356,35 @@ def addUpdateLike():
 				result = cursor.fetchall()
 
 				# Send Like Email if Liked
-				if result[0][1] == "1":
-					# Get some params to send a like email.
-					# Get post title, desc, poster email, username
-					sql = ('select w.wait_title, w.wait_description, u.user_name, u.user_username as poster_email from tbl_user as u JOIN tbl_wait as w ON w.wait_user_id = u.user_id WHERE w.wait_id = %s')
-					param = (_waitId,)
-					cursor.execute(sql,param)
-					poster_data = cursor.fetchall()
+				# if result[0][1] == "1":
+				# 	# Get some params to send a like email.
+				# 	# Get post title, desc, poster email, username
+				# 	sql = ('select w.wait_title, w.wait_description, u.user_name, u.user_username as poster_email from tbl_user as u JOIN tbl_wait as w ON w.wait_user_id = u.user_id WHERE w.wait_id = %s')
+				# 	param = (_waitId,)
+				# 	cursor.execute(sql,param)
+				# 	poster_data = cursor.fetchall()
 					
-					_title = poster_data[0][0]
-					_description = poster_data[0][1]
-					poster_username = poster_data[0][2]
-					poster_email = poster_data[0][3]
+				# 	_title = poster_data[0][0]
+				# 	_description = poster_data[0][1]
+				# 	poster_username = poster_data[0][2]
+				# 	poster_email = poster_data[0][3]
 
-					# Get liker username
-					sql = ('select u.user_name from tbl_user as u where u.user_id = %s')
-					param = (_user,)
-					cursor.execute(sql,param)
-					liker_data = cursor.fetchall()
-					liker_username = liker_data[0][0]
+				# 	# Get liker username
+				# 	sql = ('select u.user_name from tbl_user as u where u.user_id = %s')
+				# 	param = (_user,)
+				# 	cursor.execute(sql,param)
+				# 	liker_data = cursor.fetchall()
+				# 	liker_username = liker_data[0][0]
 
-					# send like email
-					params = (liker_username,poster_username,_title,_description)
-					message = sendgrid.Mail()
-					message.add_to(poster_email)
-					message.set_from('twg! <hi.from.twg@gmail.com>')
-					message.set_subject('%s liked your post!' % liker_username)
-					message.set_html('<p>Hey, %s liked your post!<br>%s is waiting %s for %s<br>Want to see your post? Head to twg-twg.herokuapp.com &#x1F604; <br><br><i>(Reply "Fuck Off!" to stop being told when people like your posts, or just if you feel like it.)</i></p>' % params)
+				# 	# send like email
+				# 	params = (liker_username,poster_username,_title,_description)
+				# 	message = sendgrid.Mail()
+				# 	message.add_to(poster_email)
+				# 	message.set_from('twg! <hi.from.twg@gmail.com>')
+				# 	message.set_subject('%s liked your post!' % liker_username)
+				# 	message.set_html('<p>Hey, %s liked your post!<br>%s is waiting %s for %s<br>Want to see your post? Head to twg-twg.herokuapp.com &#x1F604; <br><br><i>(Reply "Fuck Off!" to stop being told when people like your posts, or just if you feel like it.)</i></p>' % params)
 
-					msg = sg.send(message)				
+				# 	msg = sg.send(message)				
 					
 				return json.dumps({'status':'OK','total':result[0][0],'likeStatus':result[0][1]})
 			else:

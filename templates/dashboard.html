@@ -34,7 +34,7 @@
     				for (var i = 0; i < data.length; i++) {
     					
     					if (itemsPerRow < 10) {
-    						var stuff = CreateThumb(data[i].Id, data[i].Title, data[i].Description, data[i].Like, data[i].HasLiked, data[i].Poster, data[i].TimeElapsed);
+    						var stuff = CreateThumb(data[i].Id, data[i].Title, data[i].Description, data[i].Like, data[i].HasLiked, data[i].Poster, data[i].TimeElapsed, data[i].CommentsCount);
     						if (i == data.length - 1) {
     							div.append(stuff);
     							$('.well').append(div);
@@ -60,17 +60,19 @@
     		});
     	})
 
-    	function CreateThumb(id,title,desc,like,hasLiked,poster,timeElapsed) {
+    	function CreateThumb(id,title,desc,like,hasLiked,poster,timeElapsed,commentsCount) {
     		var mainDiv = $('<div>').attr('class', 'col-sm-4 col-md-4');
     		var thumbNail = $('<div>').attr('class', 'thumbnail');
-    		var caption = $('<div>').attr('class','caption');
-    		var title = $('<h4>').text(poster + " is waiting " + title + " for " + desc);
+    		var caption = $('<div>').attr({
+                'class':'caption',
+                'id':'caption_' + id});
+    		var title = $('<h4>').html(poster + " is waiting " + title + " for " + desc);
     		// var desc = $('<p>').text("for " + desc);
     		var p = $('<p>');
-    		var btn = $('<button>').attr({
+    		var btn = $('<a>').attr({
     			'id': 'likebtn_' + id,
     			'type': 'button',
-    			'class': 'btn btn-danger btn-sm'
+    			'class': '' //'btn btn-danger btn-sm'
     		});
 
     		var span = $('<span>').attr({
@@ -99,29 +101,31 @@
     		dateSpan.html(timeText);
 
     		if ((hasLiked == "1") && (Number(like) == 2)) {
-    			likeSpan.html('&nbsp; You & ' + (Number(like) - 1) + ' Other');
+    			likeSpan.html('&nbsp; You & ' + (Number(like) - 1) + ' Other &nbsp;');
     		} else if (hasLiked == "1" && Number(like) > 2) {
-    			likeSpan.html('&nbsp; You & ' + (Number(like) - 1) + ' Others');
+    			likeSpan.html('&nbsp; You & ' + (Number(like) - 1) + ' Others &nbsp;');
     		} else if (hasLiked == "1" && Number(like) == 1) {
-                likeSpan.html('&nbsp; You like this')
+                likeSpan.html('&nbsp; You &nbsp;')
             } else if (Number(like) != 1) {
-    			likeSpan.html('&nbsp;' + like + ' likes');
+    			likeSpan.html('&nbsp;' + like + "&nbsp;"); //+ ' likes');
     		} else {
-                likeSpan.html('&nbsp; 1 like')
+                likeSpan.html('&nbsp; 1&nbsp;')
             }
 
-            var commentBtn = $('<button>').attr({
-                'id': 'commentbtn_' + id,
+            var spacer = $('<span>').text(" ");
+            var showCommentBtn = $('<a>').attr({
+                'id': 'showCommentbtn_' + id,
                 'type': 'button',
-                'class': 'btn btn-sm'
+                'class': ''
             });
 
-            var commentSpan = $('<span>').text("Comment");
+            var commentSpan = $('<span>').text("🗯 " +commentsCount);
 
     		p.append(btn.append(span).append(likeSpan));
-            p.append(commentBtn.append(commentSpan));
+            p.append(spacer);
+            p.append(showCommentBtn.append(commentSpan));
 
-    		caption.append(dateSpan);
+            caption.append(dateSpan);
     		caption.append(title);
     		caption.append(p);
 
@@ -148,11 +152,11 @@
     				if (obj.likeStatus == "1" && obj.total > 2) {
     					$('#span_'+spId).html('&nbsp;You & ' + (Number(obj.total) - 1) + ' Others');
     				} else if (obj.likeStatus == "1" && obj.total == 1) {
-    					$('#span_'+spId).html('&nbsp; Liked');
+    					$('#span_'+spId).html('&nbsp; Liked &nbsp;');
     				} else if (obj.likeStatus == "1" && obj.total == 2) {
-    					$('#span_'+spId).html('&nbsp; You & 1 Other');
+    					$('#span_'+spId).html('&nbsp; You & 1 Other &nbsp;');
     				} else { 
-    					$('#span_'+spId).html('&nbsp;' + obj.total + ' likes(s)');
+    					$('#span_'+spId).html('&nbsp;' + obj.total + '&nbsp;');
     				}
     			},
     			error: function(error) {
@@ -161,16 +165,124 @@
     		});
     	});
 
-        $(document).on('click','[id^="commentbtn"]',
+        $(document).on('click','[id^="showCommentbtn"]',
             function() {
                 myId = $(this).attr('id').split('_')[1];
+                ShowHideComments();
+
+        });
+        
+        function ShowHideComments() {
+            // toggle - if there's a comment showing, remove, else show
+            console.log("toggling")
+            if ($('#caption_' + myId).find('#commentDiv_' + myId).length) {
+                $('#commentDiv_' + myId).remove();
+                $('#addCommentbtn_' + myId).remove();
+            } else if ($('#caption_' + myId).find('#addCommentbtn_' + myId).length){
+                $('#addCommentbtn_' + myId).remove();
+            } else {
+                $('#addCommentbtn_' + myId).remove();
+                GetComments();
+            }
+
+        };
+
+        function GetComments() {
+            $.ajax({
+                url: '/getCommentsByWaitId',
+                type: 'POST',
+                data: {
+                    id: myId
+                },
+                success: function(response) {
+                    console.log(response);
+                    var data = JSON.parse(response);
+                    
+                    var div = $('<div>').attr({
+                        'class': '',
+                        'id': 'commentDiv_' + myId
+                    });
+                    
+                    var header = $('<p>').attr('class','text-muted').html("<i>Comments</i>");
+
+                    div.append(header);
+
+                    var itemsPerRow = 0;
+                    for (var i = 0; i < data.length; i++) {
+                        
+                        if (itemsPerRow < 10) {
+                            var stuff = CreateCommentThumb(data[i].Id, data[i].Poster, data[i].Comment, data[i].TimeElapsed);
+                            if (i == data.length - 1) {
+                                div.append(stuff);
+                                $('#caption_' + myId).append(div);
+                            } else {
+                                div.append(stuff);
+                                itemsPerRow++;
+                            }
+                        } else {
+                            $('#caption_' + myId).append(div);
+                            div = $('<div>').attr('class','thumbnail');
+                            div.append(stuff);
+
+                            if (i == data.length - 1) {
+                                $('#caption_' + myId).append(div);
+                            }
+                            itemsPerRow = 1;
+                        }
+                    }
+
+                    var addButton = $('<btn>').attr({
+                        'id': 'addCommentbtn_' + myId,
+                        'class': 'btn btn-danger btn-sm'
+                    });
+                    var btnSpan = $('<span>').text("add comment");
+                    $('#caption_'+ myId).append(addButton.append(btnSpan));
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        function CreateCommentThumb(id,poster,comment,timeElapsed) {
+            var commentDiv = $('<div>').attr({
+                'class':'',
+                'id':'commentCaption_' + myId
+            });
+            var text = $('<p>').html("<b>" + poster + "</b>: " + comment);
+
+            var dateSpan = $('<span>').attr('class','datespan');
+
+            if (timeElapsed < 60) {
+                var timeText = timeElapsed + 'm ago';
+            } else if (timeElapsed < 120) {
+                var timeText = '1h ago';
+            } else if (timeElapsed < 1440) {
+                var timeText = String(Math.round(timeElapsed/60)) + 'h ago';
+            } else if (timeElapsed < 2880) {
+                var timeText = '1d ago';
+            } else if (timeElapsed < 43200) {
+                var timeText = String(Math.round(timeElapsed/1440)) + 'd ago';
+            } else {
+                var timeText = '> 1 month ago';
+            }
+
+            dateSpan.html("" + timeText);
+            commentDiv.append(dateSpan.append(text));
+            commentDiv.append(text);
+            // commentDiv.append(text.append(dateSpan));
+            return commentDiv;
+
+        };
+
+        $(document).on('click','[id^="addCommentbtn"]',
+            function() {
                 //Trigger the popup
                 console.log(myId)
                 $('#commentModal').modal();
         });
 
         $(function(){
-            // GetWaits();
             $('#btnAddComment').click(function() {
                 $.ajax({
                     url: '/addComment',
@@ -181,9 +293,10 @@
                     type: 'POST',
                     success: function(res) {
                         console.log(res);
-                        $('#editModal').modal('hide');
+                        $('#commentModal').modal('hide');
                         // Repopulate the grid
-                        // GetWaits();
+                        ShowHideComments();
+                        ShowHideComments();
                     },
                     error: function(error) {
                         console.log(error);
@@ -198,21 +311,22 @@
 </head>
 
 <body>
-	<div class="container">
-		<div class="header-waitapp">
-			<nav>
-				<ul class="nav nav-pills pull-right">
-					<li role="presentation" class="active"><a href="/showAddWish">add wait &nbsp; <span class="glyphicon glyphicon-pencil"></a></li>
-					<li role="presentation"><a href="/userHome">edit</a></li>
-					<li role="presentation"><a href="/logout">logout</a></li>
-				</ul>
-			</nav>
-			
-		</div>
-        
+	<div class="">
+        <nav>
+            <ul class="nav nav-pills pull-right">
+                <li role="presentation" class="active"><a href="/showAddWish">add wait &nbsp; <span class="glyphicon glyphicon-pencil"></a></li>
+                <li role="presentation"><a href="/userHome">edit</a></li>
+                <li role="presentation"><a href="/logout">logout</a></li>
+            </ul>
+        </nav>
+            
+    </div>
+    <div class="container">
+		
+
         <div class="title-text-waitapp">
             <h3>Hey {{user}}!</h3>
-            <h4 class="text-muted">Waiting for something? You're not alone:</h4>
+            <p class="text-muted">Waiting for something? You're not alone:</p>
         </div>
 
 		<div class="well">

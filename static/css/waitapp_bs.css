@@ -54,6 +54,7 @@ a:hover {
 
 span.datespan {
   color: #7C7C7C;
+  margin-bottom: 4px;
 }
 abbr[title] {
   border-bottom: 1px dotted;
@@ -5012,7 +5013,7 @@ a.badge:focus {
 .thumbnail {
   display: block;
   padding: 4px;
-  margin-bottom: 6px;
+  margin-bottom: 4px; /*6px;*/
   line-height: 1.42857143;
   background-color: #fff;
   border: 1px solid #ddd;
@@ -5032,7 +5033,7 @@ a.thumbnail.active {
   border-color: #337ab7;
 }
 .thumbnail .caption {
-  padding: 9px;
+  padding: 9px; /*9px; */
   color: #333;
 }
 .alert {
@@ -5932,7 +5933,7 @@ button.close {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 1040;
+  /*z-index: 1040;*/
   background-color: #000;
 }
 .modal-backdrop.fade {

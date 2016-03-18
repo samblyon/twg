@@ -4,8 +4,8 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	<title>The Waiting Game</title>
-	<!-- <link href="../static/css/waitapp_bs.css" rel="stylesheet"> -->
+	<title>Edit Posts</title>
+	<link href="../static/css/waitapp_bs.css" rel="stylesheet">
 	<link href="../static/css/waitapp_jumbotron.css" rel="stylesheet">
 
     <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
@@ -19,7 +19,7 @@
 
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"></script>
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"></script> -->
 
 	<script>
     
@@ -180,21 +180,26 @@
 		</li>
 	</script>
 
+
+	<div class="header-waitapp">
+		<nav>
+			<ul class="nav nav-pills pull-center">
+				<li role="presentation"><a href="/showAddWish">add wait</a></li>
+				<li role="presentation" class="active"><a href="/showDashboard">home</a></li>
+				
+				<li role="presentation"><a href="/logout">Logout</a></li>
+			</ul>
+		</nav>
+	</div>
+
 	<div class="container">
-		<div class="header-waitapp">
-			<nav>
-				<ul class="nav nav-pills pull-right">
-					<li role="presentation" class="active"><a href="/showDashboard">home</a></li>
-					<li role="presentation" class="active"><a href="/showAddWish">add wait  <span class="glyphicon glyphicon-pencil"></span></a></li>
-					<li role="presentation"><a href="/logout">Logout</a></li>
-				</ul>
-			</nav>
-		</div>
+
 		<div class="title-text-waitapp">
-			<h3 class="text-muted">The Waiting Game</h3>
+			<h3>Edit Posts</h3>
+			<h5 class="text-muted">You can edit your posts here by clicking on them, or delete them by clicking trash.</h5>
 		</div>
 
-		<div class="jumbotron">
+		<div class="">
 			<div class="row">
 				<div class="panel-body">
 					<ul id="ulist" class="list-group">

@@ -10,17 +10,13 @@ app = Flask(__name__)
 app.secret_key = 'nope'
 
 #sendgrid configuration
-# sg = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'],os.environ['SENDGRID_PASSWORD'])
-
-#local DELETE BEFORE PUSH
-sg = sendgrid.SendGridClient('app48212412@heroku.com','krjz3lrj9559')
-
+sg = sendgrid.SendGridClient(os.environ['SENDGRID_USERNAME'],os.environ['SENDGRID_PASSWORD'])
 
 #MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'balloon'
-app.config['MYSQL_DATABASE_DB'] = 'BucketList'
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+app.config['MYSQL_DATABASE_USER'] = os.environ['DATABASE_USER']
+app.config['MYSQL_DATABASE_PASSWORD'] = os.environ['DATABASE_PASSWORD']
+app.config['MYSQL_DATABASE_DB'] = os.environ['DATABASE_NAME']
+app.config['MYSQL_DATABASE_HOST'] = os.environ['DATABASE_HOST']
 app.config['MYSQL_DATABASE_CHARSET'] = 'utf8mb4'
 app.config['MYSQL_USE_UNICODE'] = 'True'
 mysql.init_app(app)
@@ -264,6 +260,33 @@ def getCommentsByWaitId():
 			return render_template('error.html', error = "Unauthorized Access")
 	except Exception as e:
 		return render_template('error.html', error = str(e))
+
+@app.route('/deleteComment', methods=['POST'])
+def deleteComment():
+	try:
+		if session.get('user'):
+			_user = session.get('user')
+			_id = request.form['id']
+
+			conn = mysql.connect()
+			cursor = conn.cursor()
+			sql = ("DELETE FROM tbl_comment where poster_id = %s and comment_id = %s")
+			params = (_user,_id)
+			cursor.execute(sql,params)
+			result = cursor.fetchall()
+
+			if len(result) is 0:
+				conn.commit()
+				return json.dumps({'status':'OK'})
+			else:
+				return json.dumps({'status':'An Error occured'})
+		else:
+			return render_template('error.html',error = 'Unauthorized Access')
+	except Exception, e:
+		return json.dumps({'status':str(e)})
+	finally:
+		cursor.close()
+		conn.close()
 
 @app.route('/getWait',methods=['GET'])
 def getWait():

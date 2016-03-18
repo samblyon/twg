@@ -13,24 +13,14 @@
 
 <body>
 	<div class="container">
-		<div class="header-waitapp">
-			<nav>
-				<ul class="nav nav-pills pull-right">
-				<!-- 	<li role="presentation" class="active">
-						<a href="/showDashboard">back</a>
-					</li> -->
-					<!-- <li role="presentation"><a href="/logout">logout</a></li> -->
-					
-				</ul>
-			</nav>
-		</div>
+
 
 		<!-- <div class="text-title-waitapp">
 			<h4 class="text-muted"><br><br></h4>
 		</div> -->
 
 
-		<div>
+		<div class="">
 			<form class="form-horizontal" method="post" action="/addWish" accept-charset="utf-8mb4">
 				<fieldset>
 
@@ -39,15 +29,15 @@
 
 					<!-- Text input -->
 					<div class="form-group">
-						<label class="col-md-4 control-label" for="txtTitle">Waiting...</label>
+						<label class="col-md-4 control-label" for="txtTitle">How long/where are you waiting?</label>
 						<div class="col-md-4">
-							<input id="txtTitle" name="inputTitle" type="text" placeholder="35 mins" class="form-control input-md"/>
+							<input id="txtTitle" name="inputTitle" type="text" placeholder="e.g. 35 mins, at CVS, etc." class="form-control input-md"/>
 						</div>
 					</div>
 
 					<!-- Text Area -->
 					<div class="form-group">
-						<label class="col-md-4 control-label" for="txtPost">for...</label>
+						<label class="col-md-4 control-label" for="txtPost">What are you waiting for?</label>
 						<div class="col-md-4">
 							<textarea class="form-control" id="txtPost" name="inputDescription" placeholder="&#x1F36A; to be done!"></textarea>
 						</div>
@@ -57,7 +47,7 @@
 					<div class="form-group">
 						<label class="col-md-4 control-label" for="singlebutton"></label>
 						<div class="col-md-4">
-							<input id="singlebutton" name="singlebutton" class="btn btn-primary btn-lg btn-block" type="submit" value="Post!" />
+							<input id="singlebutton" name="singlebutton" class="btn btn-primary btn-lg btn-block" type="submit" value="Post my wait!" />
 						</div>
 					</div>
 
@@ -65,7 +55,7 @@
 				</fieldset>
 			</form>
 
-			<div class="jumbotron-white">
+			<div class="align-center">
 				<a href="showDashboard">jk, go back</a>
 			</div>
 		</div>

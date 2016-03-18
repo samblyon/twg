@@ -22,11 +22,15 @@ nav {
   bottom: 0;
   width: 100%;
   z-index: 1;
-  padding-bottom: 6px;
-  padding-top: 6px;
+  padding-bottom: 12px;
+  padding-top: 12px;
   margin-left: none;
 
   background-color: #fff
+}
+
+.pull-center {
+  margin-left: 15%;
 }
 
 .title-text-waitapp {
@@ -49,6 +53,7 @@ h5 {
   font-weight: normal;
   /*margin-top: 1px;*/
   margin-bottom: 1px;
+  margin-left: 2px;
 }
 
 h4 {
@@ -67,6 +72,10 @@ p {
   padding: 0px;
 }
 
+.align-center {
+  text-align: center;
+}
+
 .thumbnail {
   background-color: #f5f5f5;
   border: #fff;
@@ -82,8 +91,9 @@ p {
 /* Make the masthead heading the same height as the navigation */
 h3,
 .h3 {
-  margin-top: 5px;
-  margin-bottom: 15px;
+  margin-top: 0px;
+  margin-bottom: 10px;
+  margin-left: 2px;
 }
 
 /* Custom page footer */
@@ -109,11 +119,12 @@ h3,
 .jumbotron {
   /*float: left;*/
   margin-top: 0px;
+  padding-top: 10px;
   margin-bottom: 10px;
   padding-bottom: 10px;
   text-align: center;
   /*border-bottom: 1px solid #e5e5e5;*/
-  background-color: #e5e5e5;
+  background: none;
 
 }
 
@@ -128,6 +139,10 @@ h3,
   padding: 14px 24px;
   font-size: 21px;
   margin-bottom: 10px;
+}
+
+#trashSpan {
+  color: #c7c7c7;
 }
 
 /* Supporting marketing content */
@@ -156,4 +171,5 @@ h3,
   .jumbotron {
     border-bottom: 0;
   }
+
 }

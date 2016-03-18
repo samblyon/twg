@@ -20,7 +20,14 @@
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"></script> -->
 
     <script>
-    	$(function() {
+    	// $(function() {
+     //        var user = {{user}}
+     //        if (true) {
+     //            console.log({{user}});
+     //        }
+     //    })
+
+        $(function() {
     		$.ajax({
     			url: '/getAllWaits',
     			type: 'GET',
@@ -72,7 +79,7 @@
     		var btn = $('<a>').attr({
     			'id': 'likebtn_' + id,
     			'type': 'button',
-    			'class': '' //'btn btn-danger btn-sm'
+    			'class': 'btn btn-danger btn-sm'
     		});
 
     		var span = $('<span>').attr({
@@ -119,7 +126,7 @@
                 'class': ''
             });
 
-            var commentSpan = $('<span>').text("🗯 " +commentsCount);
+            var commentSpan = $('<span>').html("&nbsp;&nbsp;🗯 " + commentsCount);
 
     		p.append(btn.append(span).append(likeSpan));
             p.append(spacer);
@@ -247,7 +254,7 @@
         function CreateCommentThumb(id,poster,comment,timeElapsed) {
             var commentDiv = $('<div>').attr({
                 'class':'',
-                'id':'commentCaption_' + myId
+                'data-id': id
             });
             var text = $('<p>').html("<b>" + poster + "</b>: " + comment);
 
@@ -267,12 +274,59 @@
                 var timeText = '> 1 month ago';
             }
 
+            var trashDiv = $('<div>').attr({
+                'class':'pull-right action-buttons',
+                'data-id': id,
+                'id': "DeleteButton"
+            });
+            var trashLink = $('<a>').attr({
+                'onclick':'DeleteComment(this)',
+                'data-id': id
+            });
+            var trashSpan = $('<span>').attr({
+                'class':'glyphicon glyphicon-trash',
+                'id':'trashSpan'
+            });
+
+            trashDiv.append(trashLink.append(trashSpan));
+
             dateSpan.html("" + timeText);
+
             commentDiv.append(dateSpan.append(text));
-            commentDiv.append(text);
+            commentDiv.append(text.append(trashDiv));
+
+
             // commentDiv.append(text.append(dateSpan));
             return commentDiv;
 
+        };
+
+        // $(document).on('click','[id^="DeleteButton"]',
+        //     function() {
+        //             console.log("poof of smoke")
+        //             $.ajax
+        //         });
+
+        function DeleteComment(elem) {
+            localStorage.setItem('delete-id',$(elem).attr('data-id'));
+            var comment_id = localStorage.getItem('delete-id');
+            console.log(comment_id);
+            $.ajax({
+                url: '/deleteComment',
+                data: {
+                    id: comment_id
+                },
+                type: 'POST',
+                success: function(res) {
+                    console.log(res);
+                    ShowHideComments();
+                    ShowHideComments();
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+
+            });
         };
 
         $(document).on('click','[id^="addCommentbtn"]',
@@ -313,20 +367,19 @@
 <body>
 	<div class="">
         <nav>
-            <ul class="nav nav-pills pull-right">
-                <li role="presentation" class="active"><a href="/showAddWish">add wait &nbsp; <span class="glyphicon glyphicon-pencil"></a></li>
+            <ul class="nav nav-pills pull-center">
                 <li role="presentation"><a href="/userHome">edit</a></li>
+                <li role="presentation" class="active"><a href="/showAddWish">I'm waiting &nbsp; <span class="glyphicon glyphicon-pencil"></a></li>
                 <li role="presentation"><a href="/logout">logout</a></li>
             </ul>
         </nav>
             
     </div>
+    
     <div class="container">
-		
-
         <div class="title-text-waitapp">
             <h3>Hey {{user}}!</h3>
-            <p class="text-muted">Waiting for something? You're not alone:</p>
+            <h5 class="text-muted">Waiting? Looks like everyone else is too...</h5>
         </div>
 
 		<div class="well">
@@ -340,7 +393,7 @@
 
 	</div>
 
-    <!--Edit Popup-->
+    <!--Add Comment Popup-->
     <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel">
         <div class="modal-dialog" id="commentModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-content">

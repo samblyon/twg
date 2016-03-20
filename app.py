@@ -192,18 +192,20 @@ def addComment():
 			if len(data) is 0:
 				conn.commit()
 
-				# Get commenter username, wait poster email
-				sql = ("SELECT u.user_name as 'poster' FROM tbl_user as u JOIN tbl_comment as c on c.poster_id = u.user_id WHERE wait_id = %s")
-				params = (_wait_id,)
+				# Get commenter username
+				sql = ("SELECT u.user_name as 'poster' FROM tbl_user as u WHERE user_id = %s")
+				params = (_user,)
 				cursor.execute(sql, params)
 				result = cursor.fetchall()
 				_poster = result[0][0]
 
-				sql = ("SELECT u.user_name as 'waiter', u.user_username as 'waiter_email' FROM tbl_user as u JOIN tbl_wait as w ON w.wait_user_id = u.user_id WHERE wait_id = %s" % _wait_id)
+				# Get waiter username and email
+				sql = ("SELECT u.user_name as 'waiter', u.user_username as 'waiter_email', u.user_id FROM tbl_user as u JOIN tbl_wait as w ON w.wait_user_id = u.user_id WHERE wait_id = %s" % _wait_id)
 				cursor.execute(sql)
 				result = cursor.fetchall()
 				_waiter = result[0][0]
 				_waiter_email = result[0][1]
+				_waiter_user_id = result[0][2]
 
 				#Notify admin of new comment
 				message = sendgrid.Mail()
@@ -215,15 +217,16 @@ def addComment():
 
 				msg = sg.send(message)
 
-				# send like email
-				params = (_poster,_poster,_comment)
-				message = sendgrid.Mail()
-				message.add_to(_waiter_email)
-				message.set_from('twg! <hi.from.twg@gmail.com>')
-				message.set_subject('New comment from %s!' % _poster)
-				message.set_html('<p>Hey, %s commented on your post!<br> %s was all like, \"%s\"<br><br>Post and comment are at twg-twg.herokuapp.com &#x1F604; <br><br><br><i>(Reply "Very hermit amaze quiet" to stop being told when people comment on your posts, or just if you feel like it.)</i></p>' % params)
+				# send comment email if user != wait poster
+				if _user != _waiter_user_id:
+					params = (_poster,_poster,_comment)
+					message = sendgrid.Mail()
+					message.add_to(_waiter_email)
+					message.set_from('twg! <hi.from.twg@gmail.com>')
+					message.set_subject('New comment from %s!' % _poster)
+					message.set_html('<p>Hey, %s commented on your post!<br> %s was all like, \"%s\"<br><br>Post and comment are at twg-twg.herokuapp.com &#x1F604; <br><br><br><i>(Reply "Very hermit amaze quiet" to stop being told when people comment on your posts, or just if you feel like it.)</i></p>' % params)
 
-				msg = sg.send(message)	
+					msg = sg.send(message)	
 
 				return json.dumps({'status':'OK'})
 			else:
@@ -236,7 +239,7 @@ def getCommentsByWaitId():
 	try:
 		if session.get('user'):
 			_user = session.get('user')
-			_wait_id = request.form['id']			# _wait_id = 30
+			_wait_id = request.form['id']
 
 			con = mysql.connect()
 			cursor = con.cursor()

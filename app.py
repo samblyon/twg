@@ -59,10 +59,9 @@ def logout():
 def showDashboard():
 	return render_template('dashboard.html',user= session.get('username'))
 
-@app.route('/showDashboard/<int:post_id>')
+@app.route('/showDashboard/<post_id>')
 def showDashboard_two(post_id):
-	# return render_template('dashboard.html',user=session.get('username'),anchor=('%s' % post_id))
-	print redirect(url_for('showDashboard',post_id='922'))
+	return render_template('dashboard.html',user=session.get('username'),anchor=('%s' % post_id))
 
 
 @app.route('/signUp',methods=['POST','GET'])

@@ -66,7 +66,6 @@
     		var caption = $('<div>').attr({
                 'class':'caption',
                 'id':'caption_' + id});
-            var anchor = $('<a>').attr('name','anchor_'+id);
     		var title = $('<h4>').html(poster + " is waiting " + title + " for " + desc);
     		// var desc = $('<p>').text("for " + desc);
     		var p = $('<p>');
@@ -128,7 +127,6 @@
             p.append(spacer);
             p.append(showCommentBtn.append(commentSpan));
 
-            caption.append(anchor);
             caption.append(dateSpan);
     		caption.append(title);
     		caption.append(p);
@@ -417,6 +415,6 @@
     </div>
 
 </body>
-<!-- 
-    <script> window.location.hash = "caption_{{anchor}}"; </script> -->
+
+    <script> window.location.hash = "caption_{{anchor_}}"; </script>
 </html>

@@ -60,7 +60,7 @@ def showDashboard():
 	return render_template('dashboard.html',user= session.get('username'))
 
 @app.route('/showDashboard/<int:post_id>')
-def showDashboard(post_id):
+def showDashboard_two(post_id):
 	return url_for('showDashboard',_anchor=('%s' % post_id))
 
 

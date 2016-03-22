@@ -61,7 +61,7 @@ def showDashboard():
 
 @app.route('/showDashboard/<int:post_id>')
 def showDashboard_two(post_id):
-	return redirect(url_for('showDashboard',user=session.get('username'),anchor_=('%s' % post_id)))
+	return render_template('dashboard.html',user=session.get('username'),anchor=('%s' % post_id))
 
 
 @app.route('/signUp',methods=['POST','GET'])

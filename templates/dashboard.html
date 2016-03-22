@@ -378,15 +378,9 @@
             <h5 class="text-muted">What are <b>you</b> waiting for?</h5>
         </div>
 
-        <a href="#caption_{{anchor}}">go to my post</a>
 		<div class="well">
             
         </div>
-        <script> 
-            setInterval(function () {
-                window.location.hash = "#caption_{{anchor}}"}, 500
-            );
-        </script>
 
 		<footer class="footer" id="caption_1">
 			<p>&copy; SBL 2016</p>
@@ -419,6 +413,13 @@
             </div>
         </div>
     </div>
+
+    <script> 
+        setInterval(function () {
+            window.location.hash = "#caption_{{anchor}}"}, 250
+        );
+    </script>
+
 
 </body>
 

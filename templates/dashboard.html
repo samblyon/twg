@@ -382,6 +382,11 @@
 		<div class="well">
             
         </div>
+        <script> 
+            window.onload = function (event) {
+                window.location.hash = "#caption_{{anchor}}";
+            };
+        </script>
 
 		<footer class="footer" id="caption_1">
 			<p>&copy; SBL 2016</p>
@@ -417,8 +422,5 @@
 
 </body>
 
-    <script> $(document).ready(function(){
-        window.location.href = "#caption_{{anchor}}";
-        });
-    </script>
+
 </html>

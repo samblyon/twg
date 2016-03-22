@@ -1,7 +1,7 @@
 import os
 import sendgrid
 from sendgrid import SendGridError, SendGridClientError, SendGridServerError
-from flask import Flask, render_template, json, request, redirect, session
+from flask import Flask, render_template, json, request, redirect, session, url_for
 from flask.ext.mysql import MySQL
 from werkzeug import generate_password_hash, check_password_hash
 

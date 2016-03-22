@@ -59,6 +59,11 @@ def logout():
 def showDashboard():
 	return render_template('dashboard.html',user= session.get('username'))
 
+@app.route('/showDashboard/<int:post_id>')
+def showDashboard(post_id):
+	return render_template('dashboard.html',user= session.get('username'),_anchor=('%s' % post_id))
+
+
 @app.route('/signUp',methods=['POST','GET'])
 def signUp():
 	try:
@@ -155,7 +160,7 @@ def addWish():
 				message.add_to('sblyon@me.com')
 				message.set_from('twg! <hi.from.twg@gmail.com>')
 				message.set_subject('New Post by %s' % _username)
-				message.set_text('%s is waiting %s for %s' % params)
+				message.set_html('%s is waiting %s for %s, twg-twg.herokuapp.com/showDashboard/922' % params)
 
 				msg = sg.send(message)
 

@@ -383,9 +383,9 @@
             
         </div>
         <script> 
-            window.onload = function (event) {
-                window.location.hash = "#caption_{{anchor}}";
-            };
+            setInterval(function () {
+                window.location.hash = "#caption_{{anchor}}"}, 500
+            );
         </script>
 
 		<footer class="footer" id="caption_1">
